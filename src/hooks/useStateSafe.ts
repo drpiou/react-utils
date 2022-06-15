@@ -3,7 +3,7 @@ import useIsMounted from './useIsMounted';
 
 export type UseStateSafe<T> = [T, React.Dispatch<React.SetStateAction<T>>];
 
-const useStateSafe = <T>(initialValue: T): UseStateSafe<T> => {
+const useStateSafe = <T>(initialValue: T | (() => T)): UseStateSafe<T> => {
   const isMounted = useIsMounted();
 
   const [state, setState] = React.useState(initialValue);

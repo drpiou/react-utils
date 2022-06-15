@@ -6,10 +6,9 @@ export declare type WithHooksOptions<H> = {
     [Key in keyof H]: H[Key] | [H[Key], ...(H[Key] extends () => unknown ? Parameters<H[Key]> : never)] | {
         hook: H[Key];
         invoke?: (p?: any) => unknown;
-        invokeParameters?: (p?: any) => H[Key] extends () => unknown ? Parameters<H[Key]> : never;
         parameters?: H[Key] extends () => unknown ? Parameters<H[Key]> : never;
     };
 };
 declare type WithHooksHocProps<P, H> = Omit<P, keyof H>;
-declare const withHooks: <H>(options: WithHooksOptions<H>) => <C extends React.ComponentType<{}>, P = C extends React.ComponentType<infer I> ? I : never>(Component: React.ComponentType<P>) => (props: WithHooksHocProps<P, H>) => JSX.Element;
+export declare const withHooks: <H>(options: WithHooksOptions<H>) => <C extends React.ComponentType<{}>, P = C extends React.ComponentType<infer I> ? I : never>(Component: React.ComponentType<P>) => (props: WithHooksHocProps<P, H>) => JSX.Element;
 export default withHooks;
