@@ -3,10 +3,10 @@ import useIsMounted from './useIsMounted';
 
 export type UseStateSafe<T> = [T, React.Dispatch<React.SetStateAction<T>>];
 
-const useStateSafe = <T>(initialValue: T | (() => T)): UseStateSafe<T> => {
+const useStateSafe = <T = unknown>(initialValue?: React.SetStateAction<T>): UseStateSafe<T> => {
   const isMounted = useIsMounted();
 
-  const [state, setState] = React.useState(initialValue);
+  const [state, setState] = React.useState<T>(initialValue as never);
 
   const newSetState = React.useCallback(
     (value: React.SetStateAction<T>) => {
