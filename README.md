@@ -197,7 +197,7 @@ The `getComponentName` utility returns the component name or undefined.
 
 > It clears automatically the timeout when the component is unmounted.
 
-```typescript jsx
+```typescript
 import { getComponentName } from '@drpiou/react-utils';
 
 const result = getComponentName(MyComponent);
