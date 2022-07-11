@@ -4,7 +4,6 @@
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/drpiou/react-utils)
 ![Jest tests](https://img.shields.io/badge/passed%20test-5-green)
 ![Jest tests](https://img.shields.io/badge/stage-experimental-important)
-![GitHub all releases](https://img.shields.io/github/downloads/drpiou/react-utils/total)
 
 The `@drpiou/react-utils` package provides some React utilities.
 
