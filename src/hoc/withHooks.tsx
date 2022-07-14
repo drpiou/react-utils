@@ -1,7 +1,7 @@
 import castArray from 'lodash/castArray';
 import isPlainObject from 'lodash/isPlainObject';
 import reduce from 'lodash/reduce';
-import React from 'react';
+import React, { ComponentType } from 'react';
 import getComponentName from '../utils/getComponentName';
 
 export type WithHooksProps<T, C = unknown> = C & {
@@ -24,10 +24,10 @@ type WithHooksHocProps<P, H> = Omit<P, keyof H>;
 
 export const withHooks = <H,>(
   options: WithHooksOptions<H>,
-): (<C extends React.ComponentType, P = C extends React.ComponentType<infer I> ? I : never>(
-  Component: React.ComponentType<P>,
+): (<C extends ComponentType, P = C extends ComponentType<infer I> ? I : never>(
+  Component: ComponentType<P>,
 ) => (props: WithHooksHocProps<P, H>) => JSX.Element) => {
-  return ((Component: React.ComponentType): React.ComponentType => {
+  return ((Component: ComponentType): ComponentType => {
     const WithComponent = (props: unknown): JSX.Element => {
       const results = reduce(
         options,
