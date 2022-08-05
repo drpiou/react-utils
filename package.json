@@ -1,7 +1,21 @@
 {
-  "name": "react-utils",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@drpiou/react-utils",
+  "version": "0.0.3",
+  "description": "Provides some React utilities.",
+  "keywords": [],
+  "author": "Alex <hello@drpiou.dev>",
+  "homepage": "https://github.com/drpiou/react-utils#readme",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drpiou/react-utils.git"
+  },
+  "bugs": {
+    "url": "https://github.com/drpiou/react-utils/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "files": [
     "dist"
@@ -18,7 +32,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "toc": "gh-md-toc --insert"
   },
   "peerDependencies": {
     "react": "^18.2.0",
