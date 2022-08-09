@@ -50,9 +50,9 @@ The `withHooks` React HOC wraps the component with React hooks.
 > It can be used to wrap React hooks around React class components.
 
 ```typescript jsx
-import { HookedProps, useIsMounted, withHooks } from '@drpiou/react-utils';
+import { useIsMounted, withHooks, WithHooksProps } from '@drpiou/react-utils';
 
-export type HookedTextProps = HookedProps<
+export type HookedTextProps = WithHooksProps<
   { useIsMounted: typeof useIsMounted },
   HTMLParagraphElement
 >;

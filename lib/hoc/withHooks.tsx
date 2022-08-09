@@ -15,7 +15,6 @@ export type WithHooksOptions<H> = {
     | {
         hook: H[Key];
         invoke?: (p?: any) => unknown;
-        // invokeParameters?: (p?: any) => H[Key] extends () => unknown ? Parameters<H[Key]> : never;
         parameters?: H[Key] extends () => unknown ? Parameters<H[Key]> : never;
       };
 };
@@ -32,34 +31,39 @@ export const withHooks = <H,>(
       const results = reduce(
         options,
         (acc, option, name) => {
-          const hookOption: any = option;
+          let hookCallback: unknown;
+          let hookParameters: unknown;
 
-          const hookOptionType: 'array' | 'object' | null =
-            (hookOption && (Array.isArray(hookOption) ? 'array' : isPlainObject(hookOption) && 'object')) || null;
+          if (option) {
+            if (typeof option === 'object') {
+              if (Array.isArray(option)) {
+                hookCallback = option[0];
+                hookParameters = option.slice(1);
+              } else if (isPlainObject(option)) {
+                const objectOptions: {
+                  hook: unknown;
+                  invoke?: unknown;
+                  parameters?: unknown;
+                } = options as never;
 
-          const hookCallback =
-            hookOptionType === 'array'
-              ? hookOption[0]
-              : hookOptionType === 'object' && 'hook' in hookOption
-              ? hookOption.hook
-              : hookOption;
+                if ('hook' in objectOptions) {
+                  hookCallback = objectOptions.hook;
+                }
+
+                if ('parameters' in objectOptions) {
+                  hookParameters = objectOptions.parameters;
+                } else if ('invoke' in objectOptions && typeof objectOptions.invoke === 'function') {
+                  hookParameters = objectOptions.invoke;
+                }
+              }
+            } else {
+              hookCallback = option;
+            }
+          }
 
           if (typeof hookCallback !== 'function') {
             throw new Error(`The hook is not a function. Happened in ${getComponentName(Component) || 'undefined'}`);
           }
-
-          const hookParameters =
-            hookOptionType === 'array'
-              ? hookOption.slice(1)
-              : hookOptionType === 'object'
-              ? 'parameters' in hookOption
-                ? hookOption.parameters
-                : 'invoke' in hookOption && typeof hookOption.invoke === 'function'
-                ? hookOption.invoke(props)
-                : 'invokeParameters' in hookOption && typeof hookOption.invokeParameters === 'function'
-                ? hookOption.invokeParameters(props)
-                : undefined
-              : undefined;
 
           acc[name] = hookCallback(...castArray(hookParameters));
 
