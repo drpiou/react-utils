@@ -1,4 +1,4 @@
-import React from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import useOnUnmount from './useOnUnmount';
 
 export type UseTimeoutSet = (callback: () => void, time: number) => void;
@@ -14,19 +14,19 @@ export type UseTimeout = {
 };
 
 const useTimeout = (): UseTimeout => {
-  const timeout = React.useRef<NodeJS.Timeout>();
+  const timeout = useRef<NodeJS.Timeout>();
 
-  const set: UseTimeoutSet = React.useCallback((callback, time) => {
+  const set: UseTimeoutSet = useCallback((callback, time) => {
     timeout.current = setTimeout(callback, time);
   }, []);
 
-  const clear: UseTimeoutClear = React.useCallback(() => {
+  const clear: UseTimeoutClear = useCallback(() => {
     if (timeout.current) {
       clearTimeout(timeout.current);
     }
   }, []);
 
-  const reset: UseTimeoutReset = React.useCallback(
+  const reset: UseTimeoutReset = useCallback(
     (callback, time) => {
       clear();
 
@@ -39,7 +39,7 @@ const useTimeout = (): UseTimeout => {
     clear();
   });
 
-  return React.useMemo(
+  return useMemo(
     () => ({
       set,
       reset,

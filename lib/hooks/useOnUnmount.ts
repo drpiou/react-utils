@@ -1,13 +1,13 @@
-import React from 'react';
+import { useEffect, useRef } from 'react';
 
 export type UseOnUnmountCallback = () => void;
 
 const useOnUnmount = (callback: UseOnUnmountCallback): void => {
-  const callbackRef = React.useRef<UseOnUnmountCallback>(callback);
+  const callbackRef = useRef<UseOnUnmountCallback>(callback);
 
   callbackRef.current = callback;
 
-  React.useEffect(() => {
+  useEffect(() => {
     return (): void => {
       callbackRef.current();
     };

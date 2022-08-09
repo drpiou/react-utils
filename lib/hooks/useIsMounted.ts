@@ -1,11 +1,11 @@
-import React from 'react';
+import { RefObject, useEffect, useRef } from 'react';
 
-export type UseIsMounted = React.RefObject<boolean>;
+export type UseIsMounted = RefObject<boolean>;
 
 const useIsMounted = (): UseIsMounted => {
-  const isMounted = React.useRef(false);
+  const isMounted = useRef(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     isMounted.current = true;
 
     return () => {

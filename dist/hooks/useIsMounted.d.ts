@@ -1,4 +1,4 @@
-import React from 'react';
-export declare type UseIsMounted = React.RefObject<boolean>;
+import { RefObject } from 'react';
+export declare type UseIsMounted = RefObject<boolean>;
 declare const useIsMounted: () => UseIsMounted;
 export default useIsMounted;
