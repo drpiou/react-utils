@@ -36,7 +36,7 @@
     "toc": "gh-md-toc --insert"
   },
   "peerDependencies": {
-    "react": ">= 17.0.2 < 19.0.0"
+    "react": "^17.0.2 || ^18.0.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.182",
