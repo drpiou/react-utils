@@ -10,8 +10,8 @@ const App = (): JSX.Element => {
   };
 
   return (
-    <div className="App">
-      <div className="card">
+    <>
+      <div className={'card'}>
         <button onClick={handleClick}>mount/unmount</button>
       </div>
 
@@ -21,7 +21,7 @@ const App = (): JSX.Element => {
           <HookedThing />
         </>
       )}
-    </div>
+    </>
   );
 };
 
@@ -47,7 +47,7 @@ const Thing = (): JSX.Element => {
   };
 
   return (
-    <div className="card">
+    <div className={'card'}>
       <button onClick={handleClickSafe}>{`click to change state in 3s (useStateSafe: ${String(state)})`}</button>
       <br />
       <button onClick={handleClickTimeout}>{`click to change state in 3s (useTimeout: ${String(state)})`}</button>
@@ -92,7 +92,7 @@ class ClassThing extends Component<Props, State> {
     const { state } = this.state;
 
     return (
-      <div className="card">
+      <div className={'card'}>
         <button onClick={this._handleClick}>{`click to change state in 3s (withHooks+useIsMounted: ${String(state)})`}</button>
       </div>
     );
