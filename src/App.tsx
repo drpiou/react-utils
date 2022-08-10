@@ -1,9 +1,9 @@
-import React, { HTMLProps } from 'react';
+import React, { Component, HTMLProps, useState } from 'react';
 import { useIsMounted, useOnMount, useOnUnmount, useStateSafe, useTimeout, withHooks, WithHooksProps } from '../lib';
 import './App.css';
 
 const App = (): JSX.Element => {
-  const [state, setState] = React.useState<boolean>(false);
+  const [state, setState] = useState<boolean>(false);
 
   const handleClick = (): void => {
     setState((prevState) => !prevState);
@@ -27,11 +27,11 @@ const App = (): JSX.Element => {
 
 const Thing = (): JSX.Element => {
   useOnMount(() => {
-    alert('mounted');
+    console.log('mounted');
   });
 
   useOnUnmount(() => {
-    alert('unmounted');
+    console.log('unmounted');
   });
 
   const timeout = useTimeout();
@@ -58,15 +58,20 @@ const Thing = (): JSX.Element => {
 type Props = WithHooksProps<
   {
     useIsMounted: typeof useIsMounted;
+    useOnMount: typeof useOnMount;
+    useOnUnmount: typeof useOnUnmount;
   },
   HTMLProps<HTMLParagraphElement>
->;
+> & {
+  // useIsMounted: ReturnType<typeof useIsMounted>;
+  // useOnMount: ReturnType<typeof useOnMount>;
+};
 
 type State = {
   state: boolean;
 };
 
-class ClassThing extends React.Component<Props, State> {
+class ClassThing extends Component<Props, State> {
   _handleClick = this.handleClick.bind(this);
 
   state: State = {
@@ -94,6 +99,24 @@ class ClassThing extends React.Component<Props, State> {
   }
 }
 
-const HookedThing = withHooks({ useIsMounted })(ClassThing);
+const HookedThing = withHooks({
+  useIsMounted,
+  useOnMount: [
+    useOnMount,
+    [
+      (): void => {
+        console.log('mounted');
+      },
+    ],
+  ],
+  useOnUnmount: [
+    useOnUnmount,
+    (props: unknown): Parameters<typeof useOnMount> => [
+      (): void => {
+        console.log('unmounted', { props });
+      },
+    ],
+  ],
+})(ClassThing);
 
 export default App;

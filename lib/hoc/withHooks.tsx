@@ -1,27 +1,36 @@
 import castArray from 'lodash/castArray';
-import isPlainObject from 'lodash/isPlainObject';
 import reduce from 'lodash/reduce';
 import React, { ComponentType } from 'react';
 import getComponentName from '../utils/getComponentName';
 
-export type WithHooksProps<T, C = unknown> = C & {
-  [K in keyof T]: T[K] extends () => unknown ? ReturnType<T[K]> : never;
+export type WithHooksProps<T extends WithHook<T>, C = unknown> = C & {
+  [K in keyof T]: T[K] extends (...args: any) => infer I ? I : never;
 };
 
 export type WithHooksOptions<H> = {
+  [Key in keyof H]: H[Key] extends (...args: any) => any
+    ? H[Key]
+    : H[Key] extends [infer F, unknown[]]
+    ? [F, F extends (...args: infer I) => any ? I : never]
+    : H[Key] extends [infer F, (props: unknown) => unknown]
+    ? [F, F extends (...args: infer I) => any ? (props: unknown) => I : never]
+    : never;
+};
+
+type WithHook<T> = {
+  [K in keyof T]: (...args: any) => any;
+};
+
+type WithHookOption<H> = {
   [Key in keyof H]:
-    | H[Key]
-    | [H[Key], ...(H[Key] extends () => unknown ? Parameters<H[Key]> : never)]
-    | {
-        hook: H[Key];
-        invoke?: (p?: any) => unknown;
-        parameters?: H[Key] extends () => unknown ? Parameters<H[Key]> : never;
-      };
+    | ((...args: any) => any)
+    | [(...args: any) => any, unknown[]]
+    | [(...args: any) => any, (props: unknown) => unknown];
 };
 
 type WithHooksHocProps<P, H> = Omit<P, keyof H>;
 
-export const withHooks = <H,>(
+export const withHooks = <H extends WithHookOption<H>>(
   options: WithHooksOptions<H>,
 ): (<C extends ComponentType, P = C extends ComponentType<infer I> ? I : never>(
   Component: ComponentType<P>,
@@ -35,26 +44,13 @@ export const withHooks = <H,>(
           let hookParameters: unknown;
 
           if (option) {
-            if (typeof option === 'object') {
-              if (Array.isArray(option)) {
-                hookCallback = option[0];
-                hookParameters = option.slice(1);
-              } else if (isPlainObject(option)) {
-                const objectOptions: {
-                  hook: unknown;
-                  invoke?: unknown;
-                  parameters?: unknown;
-                } = options as never;
+            if (Array.isArray(option)) {
+              hookCallback = option[0];
 
-                if ('hook' in objectOptions) {
-                  hookCallback = objectOptions.hook;
-                }
-
-                if ('parameters' in objectOptions) {
-                  hookParameters = objectOptions.parameters;
-                } else if ('invoke' in objectOptions && typeof objectOptions.invoke === 'function') {
-                  hookParameters = objectOptions.invoke;
-                }
+              if (Array.isArray(option[1])) {
+                hookParameters = option[1];
+              } else if (typeof option[1] === 'function') {
+                hookParameters = (option[1] as (props: unknown) => unknown)(props);
               }
             } else {
               hookCallback = option;
@@ -62,7 +58,7 @@ export const withHooks = <H,>(
           }
 
           if (typeof hookCallback !== 'function') {
-            throw new Error(`The hook is not a function. Happened in ${getComponentName(Component) || 'undefined'}`);
+            throw new Error(`The hook is not a function. Happened in ${WithComponent.displayName || 'undefined'}`);
           }
 
           acc[name] = hookCallback(...castArray(hookParameters));
