@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [0.0.3] - 2022-xx-xx
 
+### Changed
+
+- better `withHooks` types
+
 ### Fixed
 
 - fixed import
