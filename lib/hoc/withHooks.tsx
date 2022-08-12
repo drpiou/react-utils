@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import castArray from 'lodash/castArray';
 import reduce from 'lodash/reduce';
 import React, { ComponentType } from 'react';
