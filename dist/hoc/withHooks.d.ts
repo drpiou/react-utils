@@ -1,4 +1,4 @@
-import React, { ComponentType } from 'react';
+import React, { ComponentProps, ComponentType } from 'react';
 export declare type WithHooksProps<T extends WithHook<T>, C = unknown> = C & {
     [K in keyof T]: T[K] extends (...args: any) => infer I ? I : never;
 };
@@ -12,5 +12,5 @@ declare type WithHookOption<H> = {
     [Key in keyof H]: ((...args: any) => any) | [(...args: any) => any, unknown[]] | [(...args: any) => any, (props: unknown) => unknown];
 };
 declare type WithHooksHocProps<P, H> = Omit<P, keyof H>;
-export declare const withHooks: <H extends WithHookOption<H>>(options: WithHooksOptions<H>) => <C extends React.ComponentType<{}>, P = C extends React.ComponentType<infer I> ? I : never>(Component: React.ComponentType<P>) => (props: WithHooksHocProps<P, H>) => JSX.Element;
+export declare const withHooks: <H extends WithHookOption<H>>(options: WithHooksOptions<H>) => <C extends React.ComponentType<{}>, P = React.ComponentProps<C>>(Component: React.ComponentType<P>) => (props: WithHooksHocProps<P, H>) => JSX.Element;
 export default withHooks;

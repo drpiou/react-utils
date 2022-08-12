@@ -1,3 +1,4 @@
+import { log } from '@drpiou/ts-utils';
 import React, { Component, HTMLProps, useState } from 'react';
 import { useIsMounted, useOnMount, useOnUnmount, useStateSafe, useTimeout, withHooks, WithHooksProps } from '../lib';
 import './App.css';
@@ -27,11 +28,11 @@ const App = (): JSX.Element => {
 
 const Thing = (): JSX.Element => {
   useOnMount(() => {
-    console.log('mounted');
+    log('mounted');
   });
 
   useOnUnmount(() => {
-    console.log('unmounted');
+    log('unmounted');
   });
 
   const timeout = useTimeout();
@@ -105,7 +106,7 @@ const HookedThing = withHooks({
     useOnMount,
     [
       (): void => {
-        console.log('mounted');
+        log('mounted');
       },
     ],
   ],
@@ -113,7 +114,7 @@ const HookedThing = withHooks({
     useOnUnmount,
     (props: unknown): Parameters<typeof useOnMount> => [
       (): void => {
-        console.log('unmounted', { props });
+        log('unmounted', { props });
       },
     ],
   ],
