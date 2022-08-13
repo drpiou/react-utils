@@ -1,9 +1,8 @@
 # `@drpiou/react-utils`
 
-![GitHub](https://img.shields.io/github/license/drpiou/react-utils)
-![GitHub package.json version](https://img.shields.io/github/package-json/v/drpiou/react-utils)
-![Jest tests](https://img.shields.io/badge/passed%20test-5-green)
-![Jest tests](https://img.shields.io/badge/stage-experimental-important)
+![Licence](https://img.shields.io/github/license/drpiou/react-utils)
+![Package.json version](https://img.shields.io/github/package-json/v/drpiou/react-utils)
+![Stage](https://img.shields.io/badge/stage-experimental-important)
 
 The `@drpiou/react-utils` package provides some React utilities.
 
@@ -45,49 +44,81 @@ yarn add @drpiou/react-utils
 
 #### `withHooks`
 
-The `withHooks` React HOC wraps the component with React hooks.
-
-> It can be used to wrap React hooks around React class components.
+The `withHooks` React HOC wraps the React Class component with React hooks.
 
 ```typescript jsx
-import { HookedProps, useIsMounted, withHooks } from '@drpiou/react-utils';
+import {
+  useIsMounted,
+  useOnMount,
+  useOnUnmount,
+  withHooks,
+  WithHooksProps,
+} from '@drpiou/react-utils';
 
-export type HookedTextProps = HookedProps<
-  { useIsMounted: typeof useIsMounted },
-  HTMLParagraphElement
+type Props = WithHooksProps<
+  {
+    useIsMounted: typeof useIsMounted;
+    useOnMount: typeof useOnMount;
+    useOnUnmount: typeof useOnUnmount;
+  },
+  HTMLProps<HTMLParagraphElement>
 >;
 
 type State = {
-  toggle: boolean;
+  state: boolean;
 };
 
-class HookedText extends React.Component<HookedTextProps, State> {
+class MyComponent extends Component<Props, State> {
   _handleClick = this.handleClick.bind(this);
 
   state: State = {
-    toggle: false,
+    state: false,
   };
 
   handleClick(): void {
-    const { useIsMounted } = this.props;
+    const { useIsMounted: hookIsMounted } = this.props;
 
-    if (useIsMounted.current) {
-      this.setState((prevState) => ({ toggle: !prevState.toggle }));
-    }
+    setTimeout(() => {
+      if (hookIsMounted.current) {
+        this.setState((prevState) => ({ state: !prevState.state }));
+      }
+    }, 3000);
   }
 
   render(): JSX.Element {
-    return <div onClick={this._handleClick} />;
+    const { state } = this.state;
+
+    return (
+      <div className={'card'}>
+        <button
+          onClick={this._handleClick}
+        >{`click to change state in 3s (withHooks+useIsMounted: ${String(
+          state,
+        )})`}</button>
+      </div>
+    );
   }
 }
 
-export default withHooks({ useIsMounted })(HookedText);
-
-// export default withHooks({ [prop]: useIsMounted })(HookedText);
-
-// export default withHooks({ [prop]: [useIsMounted, ...arguments] })(HookedText);
-
-// export default withHooks({ [prop]: { hook: useIsMounted, invoque: (props) => [...arguments] <-- this one is not typechecked } })(HookedText);
+const MyComponentWithHooks = withHooks({
+  useIsMounted,
+  useOnMount: [
+    useOnMount,
+    [
+      (): void => {
+        console.log('mounted');
+      },
+    ],
+  ],
+  useOnUnmount: [
+    useOnUnmount,
+    (props: unknown): Parameters<typeof useOnMount> => [
+      (): void => {
+        console.log('unmounted', { props });
+      },
+    ],
+  ],
+})(MyComponent);
 ```
 
 ### Hooks
