@@ -63,10 +63,7 @@ type Props = WithHooksProps<
     useOnUnmount: typeof useOnUnmount;
   },
   HTMLProps<HTMLParagraphElement>
-> & {
-  // useIsMounted: ReturnType<typeof useIsMounted>;
-  // useOnMount: ReturnType<typeof useOnMount>;
-};
+>;
 
 type State = {
   state: boolean;
