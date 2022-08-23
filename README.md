@@ -16,6 +16,7 @@ The `@drpiou/react-utils` package provides some React utilities.
   - [HOC](#hoc)
     - [withHooks](#withhooks)
   - [Hooks](#hooks)
+    - [useCallbackEvent](#usecallbackevent)
     - [useIsMounted](#useismounted)
     - [useOnMount](#useonmount)
     - [useOnUnmount](#useonunmount)
@@ -122,6 +123,26 @@ const MyComponentWithHooks = withHooks({
 ```
 
 ### Hooks
+
+#### `useCallbackEvent`
+
+The `useCallbackEvent` React hook will return a memoized version of the callback that is internally linked to a reference.
+
+This is an implementation attempt of the `useEvent` React hook.
+
+```typescript jsx
+import { useCallbackEvent } from '@drpiou/react-utils';
+
+const MyComponent = (): JSX.Element => {
+  const [state, setState] = React.useState<boolean>(false);
+
+  const handleClick = useCallbackEvent((): void => {
+    setState(!state);
+  });
+
+  return <div onClick={handleClick} />;
+};
+```
 
 #### `useIsMounted`
 

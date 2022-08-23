@@ -1,4 +1,4 @@
-import React, { ComponentProps, ComponentType } from 'react';
+import React from 'react';
 export declare type WithHooksProps<T extends WithHook<T>, C = unknown> = C & {
     [K in keyof T]: T[K] extends (...args: any) => infer I ? I : never;
 };
