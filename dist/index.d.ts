@@ -5,6 +5,7 @@ export type { UseOnUnmountCallback } from './hooks/useOnUnmount';
 export type { UseStateSafe } from './hooks/useStateSafe';
 export type { UseTimeout, UseTimeoutClear, UseTimeoutReset, UseTimeoutSet } from './hooks/useTimeout';
 export { default as withHooks } from './hoc/withHooks';
+export { default as useCallbackEvent } from './hooks/useCallbackEvent';
 export { default as useIsMounted } from './hooks/useIsMounted';
 export { default as useOnMount } from './hooks/useOnMount';
 export { default as useOnUnmount } from './hooks/useOnUnmount';

@@ -1,14 +1,23 @@
 import { log } from '@drpiou/ts-utils';
 import React, { Component, HTMLProps, useState } from 'react';
-import { useIsMounted, useOnMount, useOnUnmount, useStateSafe, useTimeout, withHooks, WithHooksProps } from '../lib';
+import {
+  useCallbackEvent,
+  useIsMounted,
+  useOnMount,
+  useOnUnmount,
+  useStateSafe,
+  useTimeout,
+  withHooks,
+  WithHooksProps,
+} from '../lib';
 import './App.css';
 
 const App = (): JSX.Element => {
   const [state, setState] = useState<boolean>(false);
 
-  const handleClick = (): void => {
+  const handleClick = useCallbackEvent((): void => {
     setState((prevState) => !prevState);
-  };
+  });
 
   return (
     <>
@@ -37,19 +46,20 @@ const Thing = (): JSX.Element => {
 
   const timeout = useTimeout();
 
-  const [state, setState] = useStateSafe<boolean>(false);
+  const [stateSafe, setStateSafe] = useStateSafe<boolean>(false);
+  const [state, setState] = useState<boolean>(false);
 
-  const handleClickSafe = (): void => {
-    setTimeout(() => setState((prevState) => !prevState), 3000);
-  };
+  const handleClickSafe = useCallbackEvent((): void => {
+    setTimeout(() => setStateSafe((prevState) => !prevState), 3000);
+  });
 
-  const handleClickTimeout = (): void => {
+  const handleClickTimeout = useCallbackEvent((): void => {
     timeout.set(() => setState((prevState) => !prevState), 3000);
-  };
+  });
 
   return (
     <div className={'card'}>
-      <button onClick={handleClickSafe}>{`click to change state in 3s (useStateSafe: ${String(state)})`}</button>
+      <button onClick={handleClickSafe}>{`click to change state in 3s (useStateSafe: ${String(stateSafe)})`}</button>
       <br />
       <button onClick={handleClickTimeout}>{`click to change state in 3s (useTimeout: ${String(state)})`}</button>
     </div>

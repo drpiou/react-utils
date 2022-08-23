@@ -2,7 +2,7 @@
 
 import castArray from 'lodash/castArray';
 import reduce from 'lodash/reduce';
-import React, { ComponentProps, ComponentType, memo } from 'react';
+import React, { memo } from 'react';
 import getComponentName from '../utils/getComponentName';
 
 export type WithHooksProps<T extends WithHook<T>, C = unknown> = C & {
@@ -34,10 +34,10 @@ type WithHooksHocProps<P, H> = Omit<P, keyof H>;
 
 export const withHooks = <H extends WithHookOption<H>>(
   options: WithHooksOptions<H>,
-): (<C extends ComponentType, P = ComponentProps<C>>(
-  Component: ComponentType<P>,
+): (<C extends React.ComponentType, P = React.ComponentProps<C>>(
+  Component: React.ComponentType<P>,
 ) => (props: WithHooksHocProps<P, H>) => JSX.Element) => {
-  return ((Component: ComponentType): ComponentType => {
+  return ((Component: React.ComponentType): React.ComponentType => {
     const MemoComponent = memo(Component);
 
     const WithComponent = (props: unknown): JSX.Element => {
